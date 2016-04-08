@@ -1,0 +1,53 @@
+*** Keywords ***
+Launch App
+    Open Application    ${REMOTE_URL}    automationName=${AUTONAME}    platformName=${PLATFORM_NAME}    platformVersion=${PLATFORM_VERSION}    deviceName=${DEVICE_NAME}  app=${APP}   sessionOverride=${OVERRIDE}    noReset=${NORESET}   
+
+Input username
+	[Arguments]    ${username}
+    Wait Until Page Contains Element     id=loginUserNameEditText     timeout=5s
+    Input Text    id=loginUserNameEditText    ${username}
+    Capture Page Screenshot
+Input password
+    [Arguments]    ${password}
+    Input Text    id=loginPasswordEditText    ${password}
+    Capture Page Screenshot
+
+Click Login Button
+    Click Button    LOGIN
+
+Main Page    
+    Wait Until Page Contains    ACCOUNTS
+    Capture Page Screenshot
+
+Menu Main
+    Click Element    id=up
+    Wait Until Page Contains    LOGOUT
+
+Menu Account
+    Click Element    xpath=//android.widget.TextView[@text='ACCOUNTS']
+    Wait Until Page Contains    SAVINGS
+
+Menu Money Transfer
+    Click Element    xpath=//android.widget.TextView[@text='MONEY TRANSFER']
+    Wait Until Page Contains    MONEY TRANSFER
+
+Menu Logout
+    Click Element    xpath=//android.widget.TextView[@text='LOGOUT']
+    Wait Until Page Contains    Are you sure you want to log out from Advantage?
+    Capture Page Screenshot
+    Click Button    Yes
+    Wait Until Page Contains Element    id=loginButton    timeout=10s
+    Capture Page Screenshot
+
+Money Transfer
+    [Arguments]    ${totalmoney}
+    Click Element    id=transferFromSpinner
+    Click Element    xpath=//android.widget.TextView[@text='Checking']
+    Click Element    id=transferToSpinner
+    Click Element    xpath=//android.widget.TextView[@text='Savings']
+    Input Text    id=transferSumEditText     ${totalmoney}
+    Capture Page Screenshot
+    Click Button    TRANSFER
+    Wait Until Page Contains Element    id=button1    timeout=10s
+    Get Element Attribute   id=message    name
+    
