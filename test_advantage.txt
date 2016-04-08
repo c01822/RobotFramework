@@ -1,0 +1,38 @@
+*** Settings ***
+Library    AppiumLibrary
+Library    String
+Resource    Resource_Keyword.txt
+
+*** Variables ***
+${REMOTE_URL}     http://127.0.0.1:4723/wd/hub
+${AUTONAME}    Appium
+${PLATFORM_NAME}    Android
+${PLATFORM_VERSION}    5.1.0
+${DEVICE_NAME}    Android Emulator
+${APP}            ${CURDIR}/demoapp/advantage.apk
+${OVERRIDE}    true
+${NORESET}    false
+
+*** Test Cases ***
+Advantage Bank
+    [Tags]    Advantage Bank
+    Launch App
+    Wait Until Page Contains    HP Demo    timeout=20s
+    Input username    userdemo
+    Input password    password  
+    Click Login Button
+    Main Page
+Transfer Money
+    Menu Main
+    [Tags]    Transfer Money
+    Menu Money Transfer 
+    Money Transfer    500
+Run-Keyword-If
+    ${Status}=    Set Variable    Money failed to transfer
+    Run Keyword If    '${Status}' == 'Money failed to transfer'    Log     Transfer failed
+    Run Keyword If    '${Status}' == 'Money transferred correctly'    Log    Transfer passed
+    Click Button    OK
+Logout    
+    [Tags]    Logout
+    Menu Main
+    Menu Logout
